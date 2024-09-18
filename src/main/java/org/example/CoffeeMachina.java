@@ -108,6 +108,28 @@ public class CoffeeMachina {
         }
     }
 
+    public void makeThreeCups(Recipe recipe) {
+        if (!this.isOn) {
+            System.out.println("Кофемашина выключена.");
+            return;
+        }
+        if (cleaning >= CLEANING || cleaning + 3 >= CLEANING) {
+            System.out.println("ТРЕБУЕТСЯ ОЧИСТКА!");
+            return;
+        }
+        if (waterLevel >= 3 * recipe.getWater() &&
+                milkLevel >= 3 * recipe.getMilk() &&
+                coffeeLevel >= 3 * recipe.getCoffee()) {
+            waterLevel -= 3 * recipe.getWater();
+            milkLevel -= 3 * recipe.getMilk();
+            coffeeLevel -= 3 * recipe.getCoffee();
+            log.add("Приготовлено 3 чашки " + recipe);
+            System.out.println("Приготовлено 3 чашки " + recipe);
+        } else {
+            System.out.println("Недостаточно ингредиентов для приготовления 3 чашек " + recipe);
+        }
+    }
+
     public void makeCoffee(Recipe recipe, int cups) {
         if (!this.isOn) {
             System.out.println("Кофемашина выключена.");

@@ -30,7 +30,7 @@ public class Main {
 
             System.out.print("Выберите опцию: ");
             int option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (option) {
                 case 1:
@@ -101,10 +101,10 @@ public class Main {
                         System.out.println("1. Эспрессо");
                         System.out.println("2. Капучино");
                         int profileDrinkOption = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
+                        scanner.nextLine();
                         System.out.print("Введите количество чашек: ");
                         int profileCups = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
+                        scanner.nextLine();
                         Recipe profileRecipe = (profileDrinkOption == 1) ? Recipe.ESPRESSO : Recipe.CAPPUCCINO;
                         items.add(new Profile(profileRecipe, profileCups));
                         System.out.print("Добавить еще напиток в профиль? (y/n): ");
