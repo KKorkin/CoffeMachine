@@ -1,93 +1,181 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class CoffeeMachina {
     private static final int MAX_WATER = 1000;
-    private static final int MAX_MILK = 500;
-    private static final int MAX_COFFE = 1000;
-    private static final int CLEANING = 10;
+    private static final int MAX_MILK = 1000;
+    private static final int MAX_COFFEE = 1000;
+    private static final int CLEANING = 20;
 
     private int cleaning;
     private boolean isOn;
     private int waterLevel;
     private int milkLevel;
     private int coffeeLevel;
+    private List<String> log = new ArrayList<>(); // для логов
+    private Map<String, List<ProfileItem>> profiles = new HashMap<>(); // Профили с напитками
 
     public CoffeeMachina() {
         this.isOn = false;
-        this.waterLevel = 0;
-        this.milkLevel = 0;
-        this.coffeeLevel = 0;
+        this.waterLevel = 500;
+        this.milkLevel = 500;
+        this.coffeeLevel = 500;
         this.cleaning = 0;
     }
 
-    public int getMilkLevel(){
+    public int getMilkLevel() {
         return this.milkLevel;
     }
-    public int getCoffeeLevel(){
+
+    public int getCoffeeLevel() {
         return this.coffeeLevel;
     }
-    public int getWaterLevel(){
+
+    public int getWaterLevel() {
         return this.waterLevel;
     }
 
-    public void addWater(int waterLevel){
-        while (true){
-        if ((this.waterLevel < MAX_WATER) && (waterLevel + this.waterLevel <= MAX_WATER) && waterLevel >= 0 ){
-            this.waterLevel += waterLevel;
-            break;
-        }
-        else if (this.waterLevel == MAX_WATER){
-            System.out.println("Вода полная");
-            break;
-        }
-        else System.out.println("Вы пытаетесь добавь воды больше допустимого, уменьшите количество");
+    public void addWater(int waterLevel) {
+        if (waterLevel >= 0) {
+            if (this.waterLevel + waterLevel <= MAX_WATER) {
+                this.waterLevel += waterLevel;
+                System.out.println("Вода добавлена.");
+            } else {
+                System.out.println("Вы пытаетесь добавить больше воды, чем допустимо. Уровень воды установлен на максимум.");
+                this.waterLevel = MAX_WATER;
+            }
+        } else {
+            System.out.println("Количество воды должно быть неотрицательным.");
         }
     }
-    public void addMilk(int milkLevel){
-        while (true){
-            if (this.milkLevel < MAX_MILK && (milkLevel + this.milkLevel <= MAX_MILK) && milkLevel >= 0 ){
+
+    public void addMilk(int milkLevel) {
+        if (milkLevel >= 0) {
+            if (this.milkLevel + milkLevel <= MAX_MILK) {
                 this.milkLevel += milkLevel;
-                break;
+                System.out.println("Молоко добавлено.");
+            } else {
+                System.out.println("Вы пытаетесь добавить больше молока, чем допустимо. Уровень молока установлен на максимум.");
+                this.milkLevel = MAX_MILK;
             }
-            else if (this.milkLevel == MAX_MILK){
-                System.out.println("Уровень молока максимальный");
-                break;
-            }
-            else System.out.println("Вы пытаетесь добавить слишком много молока");
+        } else {
+            System.out.println("Количество молока должно быть неотрицательным.");
         }
     }
-    public void addCoffee(int coffeeLevel){
-        while (true){
-            if (this.coffeeLevel < MAX_COFFE && (coffeeLevel + this.coffeeLevel <= MAX_COFFE) &&  coffeeLevel >= 0 ){
+
+    public void addCoffee(int coffeeLevel) {
+        if (coffeeLevel >= 0) {
+            if (this.coffeeLevel + coffeeLevel <= MAX_COFFEE) {
                 this.coffeeLevel += coffeeLevel;
-                break;
+                System.out.println("Кофе добавлено.");
+            } else {
+                System.out.println("Вы пытаетесь добавить больше кофе, чем допустимо. Уровень кофе установлен на максимум.");
+                this.coffeeLevel = MAX_COFFEE;
             }
-            else if (this.coffeeLevel == MAX_COFFE){
-                System.out.println("Уровень кофе максимальный");
-                break;
-            }
-            else System.out.println("Вы пытаетесь добавить слишком много кофе");
+        } else {
+            System.out.println("Количество кофе должно быть неотрицательным.");
         }
     }
 
-    public void powerOn(){
+    public void powerOn() {
         this.isOn = true;
-        System.out.println("Кофемашина включена");
+        System.out.println("Кофемашина включена.");
     }
-    public void powerOff(){
+
+    public void powerOff() {
         this.isOn = false;
+        System.out.println("Кофемашина выключена.");
     }
 
-    public void cleanInfo(){
+    public void cleanInfo() {
         if (cleaning > 0) {
-            System.out.println("Требуется очистка");
+            System.out.println("Требуется очистка.");
+        } else {
+            System.out.println("Очистка не требуется.");
         }
-        else System.out.println("Очистка не требуется");
-    }
-    public void clean(){
-        this.cleaning = 0;
-        System.out.println("Очистка завершена");
     }
 
+    public void clean() {
+        if (cleaning > 0) {
+            this.cleaning = 0;
+            System.out.println("Очистка завершена.");
+        } else {
+            System.out.println("Очистка не требуется.");
+        }
+    }
 
+    public void makeCoffee(Recipe recipe, int cups) {
+        if (!this.isOn) {
+            System.out.println("Кофемашина выключена.");
+            return;
+        }
+        if (cleaning >= CLEANING || cleaning + cups >= CLEANING) {
+            System.out.println("ТРЕБУЕТСЯ ОЧИСТКА!");
+            return;
+        }
+        if (waterLevel >= cups * recipe.getWater() &&
+                milkLevel >= cups * recipe.getMilk() &&
+                coffeeLevel >= cups * recipe.getCoffee()) {
+            waterLevel -= cups * recipe.getWater();
+            milkLevel -= cups * recipe.getMilk();
+            coffeeLevel -= cups * recipe.getCoffee();
+            log.add("Приготовлено чашек " + recipe + ": " + cups);
+            System.out.println("Приготовлено " + cups + " чашек " + recipe + ".");
+        } else {
+            System.out.println("Недостаточно ингредиентов.");
+        }
+    }
+
+    public void addProfile(String profileName, List<ProfileItem> items) {
+        profiles.put(profileName, items);
+        System.out.println("Профиль '" + profileName + "' добавлен.");
+    }
+
+    public void makeProfileCoffee(String profileName) {
+        List<ProfileItem> items = profiles.get(profileName);
+        if (items == null) {
+            System.out.println("Профиль не найден.");
+            return;
+        }
+        if (!isOn) {
+            System.out.println("Кофемашина выключена.");
+            return;
+        }
+        for (ProfileItem item : items) {
+            if (cleaning >= CLEANING || cleaning + item.getCups() >= CLEANING) {
+                System.out.println("ТРЕБУЕТСЯ ОЧИСТКА!");
+                return;
+            }
+            Recipe recipe = item.getRecipe();
+            int cups = item.getCups();
+            if (waterLevel >= cups * recipe.getWater() &&
+                    milkLevel >= cups * recipe.getMilk() &&
+                    coffeeLevel >= cups * recipe.getCoffee()) {
+                waterLevel -= cups * recipe.getWater();
+                milkLevel -= cups * recipe.getMilk();
+                coffeeLevel -= cups * recipe.getCoffee();
+                log.add("Приготовлено чашек " + recipe + ": " + cups);
+                System.out.println("Приготовлено " + cups + " чашек " + recipe + ".");
+            } else {
+                System.out.println("Недостаточно ингредиентов для приготовления " + recipe + ".");
+                return;
+            }
+        }
+        cleaning += items.size(); // Допустим, что каждая порция увеличивает необходимость очистки
+    }
+
+    public void printLog() {
+        if (log.isEmpty()) {
+            System.out.println("Лог пуст.");
+        } else {
+            System.out.println("Лог операций:");
+            for (String entry : log) {
+                System.out.println(entry);
+            }
+        }
+    }
 }
