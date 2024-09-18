@@ -83,10 +83,21 @@ public class Main {
                     scanner.nextLine();
                     System.out.println("Сколько чашек хотитите?" +
                             "\n 1) 1" +
-                            "\n Свой вариант" +
-                            "\n 3)3");
+                            "\n 2) Свой вариант" +
+                            "\n 3) 3");
                     int cups = scanner.nextInt();
-                    if (cups == 2) {
+                    if (cups == 3) {
+                        if (drinkOption == 1) {
+                            machine.makeThreeCups(Recipe.ESPRESSO);
+                        }
+                        else if (drinkOption == 2) {
+                            machine.makeThreeCups(Recipe.CAPPUCCINO);
+                        }
+                        else {
+                            System.out.println("Неверный выбор напитка.");
+                        }
+                        break;
+                    } else if (cups == 2) {
                         System.out.print("Введите количество чашек: ");
                         cups = scanner.nextInt();
                     }
