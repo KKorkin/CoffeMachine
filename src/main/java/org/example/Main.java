@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        CoffeeMachina machine = new CoffeeMachina();  
+        CoffeeMachina machine = new CoffeeMachina();
         boolean running = true;
 
         while (running) {
