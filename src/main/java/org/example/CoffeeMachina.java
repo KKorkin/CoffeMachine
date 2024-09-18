@@ -17,7 +17,7 @@ public class CoffeeMachina {
     private int milkLevel;
     private int coffeeLevel;
     private List<String> log = new ArrayList<>(); // для логов
-    private Map<String, List<ProfileItem>> profiles = new HashMap<>(); // Профили с напитками
+    private Map<String, List<Profile>> profiles = new HashMap<>(); // Профили с напитками
 
     public CoffeeMachina() {
         this.isOn = false;
@@ -130,13 +130,13 @@ public class CoffeeMachina {
         }
     }
 
-    public void addProfile(String profileName, List<ProfileItem> items) {
+    public void addProfile(String profileName, List<Profile> items) {
         profiles.put(profileName, items);
         System.out.println("Профиль '" + profileName + "' добавлен.");
     }
 
     public void makeProfileCoffee(String profileName) {
-        List<ProfileItem> items = profiles.get(profileName);
+        List<Profile> items = profiles.get(profileName);
         if (items == null) {
             System.out.println("Профиль не найден.");
             return;
@@ -145,7 +145,7 @@ public class CoffeeMachina {
             System.out.println("Кофемашина выключена.");
             return;
         }
-        for (ProfileItem item : items) {
+        for (Profile item : items) {
             if (cleaning >= CLEANING || cleaning + item.getCups() >= CLEANING) {
                 System.out.println("ТРЕБУЕТСЯ ОЧИСТКА!");
                 return;

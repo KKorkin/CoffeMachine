@@ -94,7 +94,7 @@ public class Main {
                 case 12:
                     System.out.print("Введите имя профиля: ");
                     String profileName = scanner.nextLine();
-                    List<ProfileItem> items = new ArrayList<>();
+                    List<Profile> items = new ArrayList<>();
                     boolean addingItems = true;
                     while (addingItems) {
                         System.out.println("Выберите напиток для профиля:");
@@ -106,7 +106,7 @@ public class Main {
                         int profileCups = scanner.nextInt();
                         scanner.nextLine(); // Consume newline
                         Recipe profileRecipe = (profileDrinkOption == 1) ? Recipe.ESPRESSO : Recipe.CAPPUCCINO;
-                        items.add(new ProfileItem(profileRecipe, profileCups));
+                        items.add(new Profile(profileRecipe, profileCups));
                         System.out.print("Добавить еще напиток в профиль? (y/n): ");
                         String continueAdding = scanner.nextLine();
                         if (continueAdding.equalsIgnoreCase("n")) {
