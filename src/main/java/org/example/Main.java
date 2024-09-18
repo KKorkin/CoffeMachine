@@ -26,7 +26,8 @@ public class Main {
             System.out.println("12. Добавить профиль напитка");
             System.out.println("13. Приготовить напиток по профилю");
             System.out.println("14. Показать лог");
-            System.out.println("15. Выход");
+            System.out.println("15. Показать рецепты");
+            System.out.println("16. Выход");
 
             System.out.print("Выберите опцию: ");
             int option = scanner.nextInt();
@@ -79,10 +80,17 @@ public class Main {
                     System.out.println("1. Эспрессо");
                     System.out.println("2. Капучино");
                     int drinkOption = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    System.out.print("Введите количество чашек: ");
+                    scanner.nextLine();
+                    System.out.println("Сколько чашек хотитите?" +
+                            "\n 1) 1" +
+                            "\n Свой вариант" +
+                            "\n 3)3");
                     int cups = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
+                    if (cups == 2) {
+                        System.out.print("Введите количество чашек: ");
+                        cups = scanner.nextInt();
+                    }
+                    scanner.nextLine();
                     if (drinkOption == 1) {
                         machine.makeCoffee(Recipe.ESPRESSO, cups);
                     } else if (drinkOption == 2) {
@@ -124,6 +132,15 @@ public class Main {
                     machine.printLog();
                     break;
                 case 15:
+                    System.out.println("Введите напиток которого хотите посмотреть рецепт:" +
+                            "\nCAPPUCCINO" +
+                            "\nESPRESSO");
+                    String rec = scanner.nextLine();
+                    if("ESPRESSO".equals(rec)){System.out.println(Recipe.ESPRESSO.getRecipe());}
+                    else if("CAPPUCCINO".equals(rec)){System.out.println(Recipe.CAPPUCCINO.getRecipe());}
+                    else System.out.println("Вы неправильно ввели название");
+                    break;
+                case 16:
                     running = false;
                     System.out.println("Выход из программы.");
                     break;
