@@ -1,11 +1,18 @@
 package org.example;
 
+import java.util.InputMismatchException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public class DogIsNotReadyException extends Exception {
+
+        public DogIsNotReadyException(String message) {
+            super(message);
+        }
+    }
+    public static void main(String[] args) throws DogIsNotReadyException {
         Scanner scanner = new Scanner(System.in);
         CoffeeMachina machine = new CoffeeMachina();
         boolean running = true;
@@ -30,133 +37,140 @@ public class Main {
             System.out.println("16. Выход");
 
             System.out.print("Выберите опцию: ");
+            try{
             int option = scanner.nextInt();
             scanner.nextLine();
-
-            switch (option) {
-                case 1:
-                    machine.powerOn();
-                    System.out.println("Кофемашина включена.");
-                    break;
-                case 2:
-                    machine.powerOff();
-                    System.out.println("Кофемашина выключена.");
-                    break;
-                case 3:
-                    System.out.print("Введите количество воды (мл): ");
-                    int water = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    machine.addWater(water);
-                    break;
-                case 4:
-                    System.out.print("Введите количество молока (мл): ");
-                    int milk = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    machine.addMilk(milk);
-                    break;
-                case 5:
-                    System.out.print("Введите количество кофе (г): ");
-                    int coffee = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    machine.addCoffee(coffee);
-                    break;
-                case 6:
-                    System.out.println("Уровень воды: " + machine.getWaterLevel() + " мл");
-                    break;
-                case 7:
-                    System.out.println("Уровень молока: " + machine.getMilkLevel() + " мл");
-                    break;
-                case 8:
-                    System.out.println("Уровень кофе: " + machine.getCoffeeLevel() + " г");
-                    break;
-                case 9:
-                    machine.cleanInfo();
-                    break;
-                case 10:
-                    machine.clean();
-                    break;
-                case 11:
-                    System.out.println("Выберите напиток:");
-                    System.out.println("1. Эспрессо");
-                    System.out.println("2. Капучино");
-                    int drinkOption = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.println("Сколько чашек хотитите?" +
-                            "\n 1) 1" +
-                            "\n 2) Свой вариант" +
-                            "\n 3) 3");
-                    int cups = scanner.nextInt();
-                    if (cups == 3) {
+                if (option < 1 || option > 16) {
+                    throw new IllegalArgumentException("Неверный выбор опции.");
+                }
+                switch (option) {
+                    case 1:
+                        machine.powerOn();
+                        System.out.println("Кофемашина включена.");
+                        break;
+                    case 2:
+                        machine.powerOff();
+                        System.out.println("Кофемашина выключена.");
+                        break;
+                    case 3:
+                        System.out.print("Введите количество воды (мл): ");
+                        int water = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        machine.addWater(water);
+                        break;
+                    case 4:
+                        System.out.print("Введите количество молока (мл): ");
+                        int milk = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        machine.addMilk(milk);
+                        break;
+                    case 5:
+                        System.out.print("Введите количество кофе (г): ");
+                        int coffee = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        machine.addCoffee(coffee);
+                        break;
+                    case 6:
+                        System.out.println("Уровень воды: " + machine.getWaterLevel() + " мл");
+                        break;
+                    case 7:
+                        System.out.println("Уровень молока: " + machine.getMilkLevel() + " мл");
+                        break;
+                    case 8:
+                        System.out.println("Уровень кофе: " + machine.getCoffeeLevel() + " г");
+                        break;
+                    case 9:
+                        machine.cleanInfo();
+                        break;
+                    case 10:
+                        machine.clean();
+                        break;
+                    case 11:
+                        System.out.println("Выберите напиток:");
+                        System.out.println("1. Эспрессо");
+                        System.out.println("2. Капучино");
+                        int drinkOption = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println("Сколько чашек хотитите?" +
+                                "\n 1) 1" +
+                                "\n 2) Свой вариант" +
+                                "\n 3) 3");
+                        int cups = scanner.nextInt();
+                        if (cups == 3) {
+                            if (drinkOption == 1) {
+                                machine.makeThreeCups(Recipe.ESPRESSO);
+                            }
+                            else if (drinkOption == 2) {
+                                machine.makeThreeCups(Recipe.CAPPUCCINO);
+                            }
+                            else {
+                                System.out.println("Неверный выбор напитка.");
+                            }
+                            break;
+                        } else if (cups == 2) {
+                            System.out.print("Введите количество чашек: ");
+                            cups = scanner.nextInt();
+                        }
+                        scanner.nextLine();
                         if (drinkOption == 1) {
-                            machine.makeThreeCups(Recipe.ESPRESSO);
-                        }
-                        else if (drinkOption == 2) {
-                            machine.makeThreeCups(Recipe.CAPPUCCINO);
-                        }
-                        else {
+                            machine.makeCoffee(Recipe.ESPRESSO, cups);
+                        } else if (drinkOption == 2) {
+                            machine.makeCoffee(Recipe.CAPPUCCINO, cups);
+                        } else {
                             System.out.println("Неверный выбор напитка.");
                         }
                         break;
-                    } else if (cups == 2) {
-                        System.out.print("Введите количество чашек: ");
-                        cups = scanner.nextInt();
-                    }
-                    scanner.nextLine();
-                    if (drinkOption == 1) {
-                        machine.makeCoffee(Recipe.ESPRESSO, cups);
-                    } else if (drinkOption == 2) {
-                        machine.makeCoffee(Recipe.CAPPUCCINO, cups);
-                    } else {
-                        System.out.println("Неверный выбор напитка.");
-                    }
-                    break;
-                case 12:
-                    System.out.print("Введите имя профиля: ");
-                    String profileName = scanner.nextLine();
-                    List<Profile> items = new ArrayList<>();
-                    boolean addingItems = true;
-                    while (addingItems) {
-                        System.out.println("Выберите напиток для профиля:");
-                        System.out.println("1. Эспрессо");
-                        System.out.println("2. Капучино");
-                        int profileDrinkOption = scanner.nextInt();
-                        scanner.nextLine();
-                        System.out.print("Введите количество чашек: ");
-                        int profileCups = scanner.nextInt();
-                        scanner.nextLine();
-                        Recipe profileRecipe = (profileDrinkOption == 1) ? Recipe.ESPRESSO : Recipe.CAPPUCCINO;
-                        items.add(new Profile(profileRecipe, profileCups));
-                        System.out.print("Добавить еще напиток в профиль? (y/n): ");
-                        String continueAdding = scanner.nextLine();
-                        if (continueAdding.equalsIgnoreCase("n")) {
-                            addingItems = false;
+                    case 12:
+                        System.out.print("Введите имя профиля: ");
+                        String profileName = scanner.nextLine();
+                        List<Profile> items = new ArrayList<>();
+                        boolean addingItems = true;
+                        while (addingItems) {
+                            System.out.println("Выберите напиток для профиля:");
+                            System.out.println("1. Эспрессо");
+                            System.out.println("2. Капучино");
+                            int profileDrinkOption = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.print("Введите количество чашек: ");
+                            int profileCups = scanner.nextInt();
+                            scanner.nextLine();
+                            Recipe profileRecipe = (profileDrinkOption == 1) ? Recipe.ESPRESSO : Recipe.CAPPUCCINO;
+                            items.add(new Profile(profileRecipe, profileCups));
+                            System.out.print("Добавить еще напиток в профиль? (y/n): ");
+                            String continueAdding = scanner.nextLine();
+                            if (continueAdding.equalsIgnoreCase("n")) {
+                                addingItems = false;
+                            }
                         }
-                    }
-                    machine.addProfile(profileName, items);
-                    break;
-                case 13:
-                    System.out.print("Введите имя профиля для приготовления: ");
-                    String profileToMake = scanner.nextLine();
-                    machine.makeProfileCoffee(profileToMake);
-                    break;
-                case 14:
-                    machine.printLog();
-                    break;
-                case 15:
-                    System.out.println("Введите напиток которого хотите посмотреть рецепт:" +
-                            "\nCAPPUCCINO" +
-                            "\nESPRESSO");
-                    String rec = scanner.nextLine();
-                    if("ESPRESSO".equals(rec)){System.out.println(Recipe.ESPRESSO.getRecipe());}
-                    else if("CAPPUCCINO".equals(rec)){System.out.println(Recipe.CAPPUCCINO.getRecipe());}
-                    else System.out.println("Вы неправильно ввели название");
-                    break;
-                case 16:
-                    running = false;
-                    System.out.println("Выход из программы.");
-                    break;
-                default:
-                    System.out.println("Неверная опция. Попробуйте снова.");
+                        machine.addProfile(profileName, items);
+                        break;
+                    case 13:
+                        System.out.print("Введите имя профиля для приготовления: ");
+                        String profileToMake = scanner.nextLine();
+                        machine.makeProfileCoffee(profileToMake);
+                        break;
+                    case 14:
+                        machine.printLog();
+                        break;
+                    case 15:
+                        System.out.println("Введите напиток которого хотите посмотреть рецепт:" +
+                                "\nCAPPUCCINO" +
+                                "\nESPRESSO");
+                        String rec = scanner.nextLine();
+                        if("ESPRESSO".equals(rec)){System.out.println(Recipe.ESPRESSO.getRecipe());}
+                        else if("CAPPUCCINO".equals(rec)){System.out.println(Recipe.CAPPUCCINO.getRecipe());}
+                        else System.out.println("Вы неправильно ввели название");
+                        break;
+                    case 16:
+                        running = false;
+                        System.out.println("Выход из программы.");
+                        break;
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("Ошибка: Введено некорректное значение! Пожалуйста, введите число.");
+                scanner.next(); // Очищаем ввод, чтобы избежать зацикливания
+            } catch (IllegalArgumentException e) {
+                System.out.println("Ошибка: " + e.getMessage());
             }
         }
         scanner.close();

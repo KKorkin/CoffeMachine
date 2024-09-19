@@ -16,8 +16,8 @@ public class CoffeeMachina {
     private int waterLevel;
     private int milkLevel;
     private int coffeeLevel;
-    private List<String> log = new ArrayList<>(); // для логов
-    private Map<String, List<Profile>> profiles = new HashMap<>(); // Профили с напитками
+    private final List<String> log = new ArrayList<>(); // для логов
+    private final Map<String, List<Profile>> profiles = new HashMap<>(); // Профили с напитками
 
     public CoffeeMachina() {
         this.isOn = false;
